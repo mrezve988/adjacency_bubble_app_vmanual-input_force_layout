@@ -24,7 +24,7 @@ room_data = {
     "Store": {"length": 8, "width": 6, "privacy": "Service"}
 }
 standard_adjacencies = [
-    ("Living Room"↔ "Dining"), ("Dining", "Kitchen"), ("Kitchen", "Store"),
+    ("Living Room", "Dining"), ("Dining", "Kitchen"), ("Kitchen", "Store"),
     ("Dining", "Bedroom 1"), ("Bedroom 1", "Bath"), ("Dining", "Bedroom 2"),
     ("Dining", "Bedroom 3"), ("Living Room", "Toilet 1")
 ]
