@@ -246,8 +246,7 @@ def draw_force_circulation(df, edges, title):
             G.add_edge(a, b)
 
     anchors = {n: (i * 2.0, 0) for i, n in enumerate(['Living Room', 'Dining', 'Kitchen']) if n in G.nodes}
-pos = nx.spring_layout(G, seed=42, pos=anchors, fixed=anchors.keys())
-  # logical spring layout
+pos = nx.spring_layout(G, seed=42, pos=anchors, fixed=anchors.keys()) # logical spring layout
     edge_x, edge_y = [], []
     edge_labels = []
     for a, b in G.edges():
