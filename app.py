@@ -222,67 +222,6 @@ else:
 # ---------- Circulation Path Visualization ----------
 st.markdown("### 🗺 Circulation Path Visualization")
 
-def draw_circulation_path(df, edges, title):
-    import plotly.graph_objects as go
-    import networkx as nx
-    import numpy as np
-
-    G = nx.Graph()
-    color_map = []
-    size_map = []
-    positions = {}
-
-    for idx, row in enumerate(df.itertuples()):
-        room = row.Room
-        dims = row._2.split("=")[0].split("x")
-        length = int(dims[0].strip().replace("'", ""))
-        width = int(dims[1].strip().replace("'", ""))
-        area = length * width
-        color_map.append(privacy_colors.get(row.Privacy, "gray"))
-        size_map.append(area)
-        x = idx % 3 * 10
-        y = idx // 3 * 10
-        positions[room] = (x, y)
-        G.add_node(room, pos=(x, y))
-
-    edge_x = []
-    edge_y = []
-    edge_labels = []
-    for a, b in edges:
-        if a in positions and b in positions:
-            x0, y0 = positions[a]
-            x1, y1 = positions[b]
-            edge_x += [x0, x1, None]
-            edge_y += [y0, y1, None]
-            dist = round(np.sqrt((x0 - x1)**2 + (y0 - y1)**2), 1)
-            edge_labels.append(((x0 + x1) / 2, (y0 + y1) / 2, dist))
-
-    node_x, node_y = zip(*[positions[n] for n in G.nodes()])
-
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=edge_x, y=edge_y, mode='lines', line=dict(width=1, color='gray')))
-    for x, y, label in edge_labels:
-        fig.add_trace(go.Scatter(x=[x], y=[y], text=[f"{label} ft"], mode='text', textfont=dict(size=10)))
-    fig.add_trace(go.Scatter(
-        x=node_x, y=node_y, mode='markers+text',
-        marker=dict(size=[a / 3 for a in size_map], color=color_map, line=dict(width=2, color='DarkSlateGrey')),
-        text=list(G.nodes()), textposition="bottom center"
-    ))
-    fig.update_layout(title=title, showlegend=False, height=550, width=550, margin=dict(l=10, r=10, t=30, b=10))
-    st.plotly_chart(fig)
-
-col_a, col_b = st.columns(2)
-with col_a:
-    st.markdown("#### 🧭 Standard Circulation Path")
-    draw_circulation_path(standard_df, standard_adjacencies, "Standard Circulation")
-
-with col_b:
-    st.markdown("#### 🧑‍🎨 User Circulation Path")
-    draw_circulation_path(user_df, user_adjacencies, "User Circulation")
-
-# ---------- Updated Force-Directed Circulation Visualization ----------
-st.markdown("### 🔁 Logical Circulation Path (Force-Directed)")
-
 def draw_force_circulation(df, edges, title):
     import networkx as nx
     import plotly.graph_objects as go
